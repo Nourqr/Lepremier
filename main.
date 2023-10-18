@@ -1,0 +1,23 @@
+#include<unistd.h> 
+#include<sys/types.h> 
+#include<stdio.h> 
+int main(int argc, 
+char * argv[]) { pid_t pid1,pid2,pid_premier; 
+int status; 
+printf("le processus en courant est %d\n",getpid()); 
+switch(pid1=fork()) { case -1: perror("fork error"); 
+break; 
+case 0: 
+execlp("ls","ls",(char *) 0); 
+break; 
+default: switch(pid2=fork()) 
+{ case -1: perror("fork error"); 
+break; case 0: execlp("ps","ps",(char *) 0); 
+break; 
+default: 
+break; } 
+break; } 
+wait(&status); 
+pid_premier = wait(&status); 
+printf("Premier processus a finir : %d\n", (pid_premier==pid1)?1:2); 
+}
